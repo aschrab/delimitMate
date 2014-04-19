@@ -450,12 +450,16 @@ endfunction " delimitMate#JumpAny() }}}
 function! delimitMate#JumpMany() " {{{
 	let line = split(getline('.')[col('.') - 1 : ], '\zs')
 	let rights = ""
+  let spaced = ""
 	let found = 0
 	for char in line
 		if index(s:g('quotes_list'), char) >= 0 ||
 					\ index(s:g('right_delims'), char) >= 0
-			let rights .= "\<Right>"
+			let rights .= spaced . "\<Right>"
+			let spaced = ""
 			let found = 1
+		elseif char == ' '
+			let spaced .= "\<Right>"
 		elseif found == 0
 			let rights .= "\<Right>"
 		else
